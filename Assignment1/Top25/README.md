@@ -8,6 +8,5 @@ Files:
 
 Compile and Run:
 1. Go to Top25 folder containing Top25.java 
-2. Use these two command: javac Top25.java
-                                            java Top25 pride-and-prejudice.txt
+2. Use these two command: javac Top25.java, java Top25 pride-and-prejudice.txt
 
