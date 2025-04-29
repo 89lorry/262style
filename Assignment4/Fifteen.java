@@ -10,6 +10,7 @@ public class Fifteen {
         StopWordFilter stopWordFilter = new StopWordFilter(wfapp);
         DataStorage dataStorage = new DataStorage(wfapp, stopWordFilter);
         WordFrequencyCounter wordFreqCounter = new WordFrequencyCounter(wfapp, dataStorage);
+        ZWordCounter zWordCounter = new ZWordCounter(wfapp, dataStorage); 
         wfapp.run("../pride-and-prejudice.txt");
     }
 }
@@ -56,6 +57,11 @@ interface EndEventHandler {
     void end();
 }
 
+interface WordEventHandler {
+    void handle(String word);
+}
+
+// app
 class DataStorage {
     private String data = "";
     private final StopWordFilter stopWordFilter;
@@ -86,10 +92,6 @@ class DataStorage {
     public void registerForWordEvent(WordEventHandler handler) {
         wordHandlers.add(handler);
     }
-}
-
-interface WordEventHandler {
-    void handle(String word);
 }
 
 class StopWordFilter {
@@ -131,5 +133,25 @@ class WordFrequencyCounter {
             Map.Entry<String, Integer> entry = sorted.get(i);
             System.out.println(entry.getKey() + " - " + entry.getValue());
         }
+    }
+}
+
+//New omponent
+class ZWordCounter {
+    private int count = 0;
+
+    public ZWordCounter(WordFrequencyFramework wfapp, DataStorage dataStorage) {
+        dataStorage.registerForWordEvent(this::checkWord);
+        wfapp.registerForEndEvent(this::printResult);
+    }
+
+    private void checkWord(String word) {
+        if (word.contains("z")) {
+            count++;
+        }
+    }
+
+    private void printResult() {
+        System.out.println("\n number of non-stop words has 'z': " + count);
     }
 }
